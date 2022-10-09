@@ -21,6 +21,9 @@ define parse
 	$(info Caddy modules: ${CADDY_MODULES})
 endef
 
+.PHONY: build-all
+build-all: $(build_targets) ## Build all images
+
 .PHONY: $(build_targets)
 $(build_targets): $(build_prefix)%: ## Build Docker image for a specific version
 	$(call parse,$(build_prefix),$@)
