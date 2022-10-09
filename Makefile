@@ -11,6 +11,8 @@ COMBINED      = $(foreach X,$(VERSIONS),$(foreach Y,$(MODULE_NAMES),$X-$Y))
 # Make targets
 build_prefix  = build-
 build_targets = $(addprefix $(build_prefix),$(COMBINED))
+push_prefix   = push-
+push_targets  = $(addprefix $(push_prefix),$(COMBINED))
 
 # helper function to parse arguments to Make targets
 define parse
@@ -34,6 +36,15 @@ $(build_targets): $(build_prefix)%: ## Build Docker image for a specific version
 		--target ${CADDY_MODULES} \
 		--tag $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES} \
 		.
+
+.PHONY: push-all
+push-all: $(push_targets) ## Build and push all images
+
+.PHONY: $(push_targets)
+$(push_targets): $(push_prefix)%: ## Build and push Docker image for a specific version
+	$(call parse,$(push_prefix),$@)
+	@docker push \
+		--tag $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES}
 
 .PHONY: help
 help: ## Display this help
