@@ -5,9 +5,21 @@ on:
     branches: [ "main" ]
 
 jobs:
-  build:
+  build-and-push-images:
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
-    - uses: actions/checkout@v3
-    - name: Build all images
-      run: make build-all
+    - name: Checkout repository
+      uses: actions/checkout@v3
+
+    - name: Login to GitHub container registry
+      uses: docker/login-action@v2
+      with:
+        registry: ghcr.io
+        username: ${{ github.actor }}
+        password: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build and push all images
+      run: make push-all
