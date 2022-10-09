@@ -41,10 +41,9 @@ $(build_targets): $(build_prefix)%: ## Build Docker image for a specific version
 push-all: $(push_targets) ## Build and push all images
 
 .PHONY: $(push_targets)
-$(push_targets): $(push_prefix)%: ## Build and push Docker image for a specific version
+$(push_targets): $(push_prefix)%: $(build_targets) ## Build and push Docker image for a specific version
 	$(call parse,$(push_prefix),$@)
-	@docker push \
-		--tag $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES}
+	@docker push $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES}
 
 .PHONY: help
 help: ## Display this help
