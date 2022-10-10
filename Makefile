@@ -7,6 +7,7 @@ VERSIONS      = $(shell cat versions.txt)
 MODULE_NAMES  = $(shell cat modules.txt | cut -d':' -f1)
 # Cartesian product of VERSIONS and MODULE_NAMES
 COMBINED      = $(foreach X,$(VERSIONS),$(foreach Y,$(MODULE_NAMES),$X-$Y))
+IMAGE_SUFFIX  ?= local-build
 
 # Make targets
 build_prefix  = build-
@@ -35,6 +36,7 @@ $(build_targets): $(build_prefix)%: ## Build Docker image for a specific version
 		--build-arg CADDY_VERSION=${CADDY_VERSION} \
 		--target ${CADDY_MODULES} \
 		--tag $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES} \
+		--tag $(REPO)/$(PROJECT):${CADDY_VERSION}-${CADDY_MODULES}-${IMAGE_SUFFIX} \
 		.
 
 .PHONY: push-all
