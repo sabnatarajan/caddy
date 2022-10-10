@@ -26,4 +26,4 @@ jobs:
         password: ${{ secrets.GITHUB_TOKEN }}
 
     - name: Build and push all images
-      run: make push-all PLATFORM=${{ env.PLATFORM }} IMAGE_SUFFIX=${{ env.GITHUB_SHA }}
+      run: PLATFORM=${PLATFORM} IMAGE_SUFFIX=${GITHUB_SHA} make push-all
