@@ -30,7 +30,7 @@ build-all: $(build_targets) ## Build all images
 .PHONY: $(build_targets)
 $(build_targets): $(build_prefix)%: ## Build Docker image for a specific version
 	$(call parse,$(build_prefix),$@)
-	@docker buildx build \
+	docker buildx build \
 		--platform $(PLATFORM) \
 		--file Dockerfile \
 		--build-arg CADDY_VERSION=${CADDY_VERSION} \
